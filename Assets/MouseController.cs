@@ -16,21 +16,27 @@ public class MouseControler : MonoBehaviour
     
     [SerializeField]
     private float moveRadius = 10f;
-
+    
     [SerializeField]
-    private float minimumPlayerDistance = 5f; // Minimum distance from player
+    private float minimumPlayerDistance = 5f;
+    
+    [SerializeField]
+    private float pathCheckInterval = 1f; // How often to check distance along path
+    
+    [SerializeField]
+    private float pathCheckThreshold = 3f; // How close to path is too close
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player"); // Make sure your player has the "Player" tag
+        player = GameObject.FindGameObjectWithTag("Player");
         
         if (player == null)
         {
             Debug.LogError("Player not found! Make sure your player object has the 'Player' tag.");
             return;
         }
-
+        
         MoveToRandomPosition();
     }
 
@@ -48,9 +54,46 @@ public class MouseControler : MonoBehaviour
         return distanceToPlayer < minimumPlayerDistance;
     }
 
+    private bool IsPathClearOfPlayer(Vector3 destination)
+    {
+        NavMeshPath path = new NavMeshPath();
+        if (agent.CalculatePath(destination, path))
+        {
+            // Check if we can create a path
+            if (path.status != NavMeshPathStatus.PathComplete)
+                return false;
+
+            // Get the corners of the path
+            Vector3[] corners = path.corners;
+            
+            // Check each segment of the path
+            for (int i = 0; i < corners.Length - 1; i++)
+            {
+                Vector3 start = corners[i];
+                Vector3 end = corners[i + 1];
+                float segmentLength = Vector3.Distance(start, end);
+                
+                // Check points along this path segment
+                for (float t = 0; t <= segmentLength; t += pathCheckInterval)
+                {
+                    Vector3 pointOnPath = Vector3.Lerp(start, end, t / segmentLength);
+                    float distanceToPlayer = Vector3.Distance(pointOnPath, player.transform.position);
+                    
+                    if (distanceToPlayer < pathCheckThreshold)
+                    {
+                        Debug.Log("Player too close to planned path");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     private void MoveToRandomPosition()
     {
-        int maxAttempts = 30; // Prevent infinite loops
+        int maxAttempts = 30;
         int attempts = 0;
 
         while (attempts < maxAttempts)
@@ -61,24 +104,22 @@ public class MouseControler : MonoBehaviour
             
             if (NavMesh.SamplePosition(randomPosition, out hit, moveRadius, NavMesh.AllAreas))
             {
-                // Check if the position is far enough from the player
-                if (!IsPositionTooCloseToPlayer(hit.position))
+                // Check if the destination and path are clear of player
+                if (!IsPositionTooCloseToPlayer(hit.position) && IsPathClearOfPlayer(hit.position))
                 {
                     agent.SetDestination(hit.position);
                     Debug.Log($"Moving to new position: {hit.position}");
-                    return; // Valid position found, exit the method
+                    return;
                 }
                 else
                 {
-                    Debug.Log("Position too close to player, trying again");
+                    Debug.Log("Position or path too close to player, trying again");
                 }
             }
-            
             attempts++;
         }
 
         Debug.LogWarning("Could not find valid position away from player after " + maxAttempts + " attempts");
-        // If we couldn't find a valid position after max attempts, just pick any valid NavMesh position
         FallbackRandomPosition();
     }
 
@@ -105,5 +146,18 @@ public class MouseControler : MonoBehaviour
         
         MoveToRandomPosition();
         isWaiting = false;
+    }
+
+    // Optionally visualize the path in the editor
+    private void OnDrawGizmos()
+    {
+        if (agent != null && agent.hasPath)
+        {
+            Vector3[] corners = agent.path.corners;
+            for (int i = 0; i < corners.Length - 1; i++)
+            {
+                Debug.DrawLine(corners[i], corners[i + 1], Color.red);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine.AI;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MouseControler : MonoBehaviour
 {
@@ -20,10 +21,18 @@ public class MouseControler : MonoBehaviour
    [SerializeField]
    private float minimumPlayerDistance = 5f;
 
+   [SerializeField]
+   private int previousLocationsToStore = 5; // How many previous locations to remember
+
+   [SerializeField]
+   private float previousLocationMinDistance = 5f; // Minimum distance from previous locations
+
    private bool isEscaping = false;
-   private float stuckCheckTime = 0.5f; // Time to wait before checking if stuck
+   private float stuckCheckTime = 0.5f;
    private float lastMovedPosition;
    private float stuckTimer;
+   
+   private List<Vector3> previousLocations = new List<Vector3>();
 
    void Start()
    {
@@ -37,6 +46,8 @@ public class MouseControler : MonoBehaviour
        }
        
        lastMovedPosition = transform.position.magnitude;
+       // Add starting position to previous locations
+       AddToPreviousLocations(transform.position);
        MoveToRandomPosition();
    }
 
@@ -44,7 +55,6 @@ public class MouseControler : MonoBehaviour
    {
        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-       // Check if we're too close to player
        if (distanceToPlayer < minimumPlayerDistance)
        {
            if (!isEscaping)
@@ -54,29 +64,46 @@ public class MouseControler : MonoBehaviour
            }
            else
            {
-               // Check if we're stuck while trying to escape
                CheckIfStuck();
            }
        }
-       // If we were escaping and now we're far enough, resume normal behavior
        else if (isEscaping && distanceToPlayer >= minimumPlayerDistance)
        {
            isEscaping = false;
            ResetStuckCheck();
            MoveToRandomPosition();
        }
-       // Normal movement behavior
        else if (!isEscaping && !isWaiting && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
        {
            StartCoroutine(WaitAndMove());
        }
    }
 
+   private void AddToPreviousLocations(Vector3 location)
+   {
+       previousLocations.Add(location);
+       if (previousLocations.Count > previousLocationsToStore)
+       {
+           previousLocations.RemoveAt(0); // Remove oldest location
+       }
+   }
+
+   private bool IsTooCloseToOldLocations(Vector3 position)
+   {
+       foreach (Vector3 oldLocation in previousLocations)
+       {
+           if (Vector3.Distance(position, oldLocation) < previousLocationMinDistance)
+           {
+               return true;
+           }
+       }
+       return false;
+   }
+
    private void CheckIfStuck()
    {
        float currentPosition = transform.position.magnitude;
        
-       // If we haven't moved significantly
        if (Mathf.Abs(currentPosition - lastMovedPosition) < 0.1f)
        {
            stuckTimer += Time.deltaTime;
@@ -104,18 +131,14 @@ public class MouseControler : MonoBehaviour
 
    private void EscapeFromPlayer()
    {
-       // Calculate direction from player to this object (opposite of direction to player)
        Vector3 directionAwayFromPlayer = (transform.position - player.transform.position).normalized;
-       
-       // Calculate a point in that direction
        Vector3 escapePoint = transform.position + directionAwayFromPlayer * (moveRadius * 2);
        
-       // Find valid NavMesh position
        NavMeshHit hit;
        if (NavMesh.SamplePosition(escapePoint, out hit, moveRadius, NavMesh.AllAreas))
        {
            agent.SetDestination(hit.position);
-           ResetStuckCheck(); // Reset stuck check when starting new escape
+           ResetStuckCheck();
            Debug.Log("Escaping from player!");
        }
    }
@@ -139,21 +162,23 @@ public class MouseControler : MonoBehaviour
            
            if (NavMesh.SamplePosition(randomPosition, out hit, moveRadius, NavMesh.AllAreas))
            {
-               if (!IsPositionTooCloseToPlayer(hit.position))
+               // Check both player distance and previous locations
+               if (!IsPositionTooCloseToPlayer(hit.position) && !IsTooCloseToOldLocations(hit.position))
                {
                    agent.SetDestination(hit.position);
+                   AddToPreviousLocations(hit.position); // Add new destination to history
                    Debug.Log($"Moving to new position: {hit.position}");
                    return;
                }
                else
                {
-                   Debug.Log("Position too close to player, trying again");
+                   Debug.Log("Position too close to player or previous locations, trying again");
                }
            }
            attempts++;
        }
 
-       Debug.LogWarning("Could not find valid position away from player after " + maxAttempts + " attempts");
+       Debug.LogWarning("Could not find valid position after " + maxAttempts + " attempts");
        FallbackRandomPosition();
    }
 
@@ -166,6 +191,7 @@ public class MouseControler : MonoBehaviour
        if (NavMesh.SamplePosition(randomPosition, out hit, moveRadius, NavMesh.AllAreas))
        {
            agent.SetDestination(hit.position);
+           AddToPreviousLocations(hit.position); // Add fallback position to history
            Debug.Log($"Moving to fallback position: {hit.position}");
        }
    }
@@ -178,10 +204,23 @@ public class MouseControler : MonoBehaviour
        float waitTime = Random.Range(minWaitTime, maxWaitTime);
        yield return new WaitForSeconds(waitTime);
        
-       if (!isEscaping) // Only move to random position if not escaping
+       if (!isEscaping)
        {
            MoveToRandomPosition();
        }
        isWaiting = false;
+   }
+
+   // Optional: Visualize previous locations in the editor
+   private void OnDrawGizmos()
+   {
+       if (previousLocations != null)
+       {
+           Gizmos.color = Color.yellow;
+           foreach (Vector3 location in previousLocations)
+           {
+               Gizmos.DrawWireSphere(location, previousLocationMinDistance);
+           }
+       }
    }
 }

@@ -29,6 +29,8 @@ public class PlayerControl : MonoBehaviour
     [HideInInspector]
     public float horizontal, vertical, lookHorizontal, lookVertical;
 
+    Vector3 floorNormal = Vector3.up;
+
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
@@ -60,8 +62,8 @@ public class PlayerControl : MonoBehaviour
 
         if (Mathf.Abs(vertical) > 0 || Mathf.Abs(horizontal) > 0)
         {
-            Vector3 moveDirection = Vector3.ProjectOnPlane(neck.forward, Vector3.up).normalized * vertical
-                            + Vector3.ProjectOnPlane(neck.right, Vector3.up).normalized * horizontal;
+            Vector3 moveDirection = Vector3.ProjectOnPlane(neck.forward, floorNormal).normalized * vertical
+                            + Vector3.ProjectOnPlane(neck.right, floorNormal).normalized * horizontal;
                     
             moveDirection = moveDirection * moveSpeed * Time.deltaTime;
 
@@ -102,10 +104,11 @@ public class PlayerControl : MonoBehaviour
         RaycastHit hit;
         if (Physics.SphereCast(transform.position + Vector3.up * 0.6f, 0.5f, Vector3.down, out hit, 0.2f, groundLayers, QueryTriggerInteraction.Ignore))
         {
-
+            floorNormal = hit.normal;
             return true;
         }
 
+        floorNormal = Vector3.up;
         return false;
     }
 

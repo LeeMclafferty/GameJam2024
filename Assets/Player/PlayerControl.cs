@@ -8,6 +8,7 @@ public class PlayerControl : MonoBehaviour
 {
     [SerializeField] Transform neck;
     [SerializeField] Transform graphicsRoot;
+    //[SerializeField] Transform rearRoot;
     [SerializeField] float rotationMultX = 1f;
     [SerializeField] float rotationMultY = 1f;
     [SerializeField] float headTiltMaxX = 80f;
@@ -18,11 +19,13 @@ public class PlayerControl : MonoBehaviour
 
     [SerializeField] LayerMask groundLayers;
 
+    float jumpBuffer = 0.2f;
+
     Rigidbody rigid;
 
     Vector2 move;
     Vector2 look;
-    bool jump;
+    float jump = 0f;
     [HideInInspector]
     public float horizontal, vertical, lookHorizontal, lookVertical;
 
@@ -45,10 +48,14 @@ public class PlayerControl : MonoBehaviour
     void FixedUpdate()
     {
         bool isGrounded = CheckGrounded();
-        if(jump)
+        if(jump > 0f)
         {
-            jump = false;
-            if(isGrounded) Jump();
+            jump -= Time.deltaTime;
+            if(isGrounded) 
+            {
+                jump = 0f;
+                Jump();
+            }
         }
 
         if (Mathf.Abs(vertical) > 0 || Mathf.Abs(horizontal) > 0)
@@ -59,6 +66,8 @@ public class PlayerControl : MonoBehaviour
             moveDirection = moveDirection * moveSpeed * Time.deltaTime;
 
             rigid.AddForce(moveDirection, ForceMode.VelocityChange);
+
+            //ROTATE REAR TO FOLLOW MOVE DIRECTION
         }
     }
 
@@ -83,7 +92,7 @@ public class PlayerControl : MonoBehaviour
 
     void Jump()
     {
-        Debug.Log("SHOULD BE JUMPING");
+        //Debug.Log("SHOULD BE JUMPING");
         rigid.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
@@ -91,7 +100,7 @@ public class PlayerControl : MonoBehaviour
     bool CheckGrounded()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, out hit, 0.2f, groundLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.SphereCast(transform.position + Vector3.up * 0.6f, 0.5f, Vector3.down, out hit, 0.2f, groundLayers, QueryTriggerInteraction.Ignore))
         {
 
             return true;
@@ -113,7 +122,7 @@ public class PlayerControl : MonoBehaviour
     void OnJump(InputValue value)
     {
         if (value.isPressed)
-            jump = true;
+            jump = jumpBuffer;
     }
     void OnAttack(InputValue value)
     {

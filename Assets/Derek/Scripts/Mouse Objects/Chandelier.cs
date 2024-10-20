@@ -9,7 +9,7 @@ public class Chandelier : MouseObject
 
     public override void OnStartWithMouse(GameObject mouse)
     {
-
+        mouse.transform.position = transform.position;
     }
 
     public override void OnStartWithoutMouse()
@@ -19,7 +19,12 @@ public class Chandelier : MouseObject
 
     public override void OnUpdateWithMouse(GameObject mouse)
     {
+        Vector3 newRotation = transform.rotation.eulerAngles;
+        newRotation.x = _shakeX.Evaluate(Mathf.Repeat(Time.time * _shakeSpeed, 1)) * _shakeFrequency;
+        newRotation.y = _shakeY.Evaluate(Mathf.Repeat(Time.time * _shakeSpeed, 1)) * _shakeFrequency;
+        newRotation.z = _shakeZ.Evaluate(Mathf.Repeat(Time.time * _shakeSpeed, 1)) * _shakeFrequency;
 
+        transform.rotation = Quaternion.Euler(newRotation);
     }
 
     public override void OnUpdateWithoutMouse()

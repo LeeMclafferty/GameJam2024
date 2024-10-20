@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MouseObjectManager : MonoBehaviour
 {
@@ -12,10 +13,29 @@ public class MouseObjectManager : MonoBehaviour
 
     [SerializeField] private Range<int> _mouseCount;
 
-    private List<MouseObject> _allMouseObjects = new();
+    private readonly List<MouseObject> _allMouseObjects = new();
     public List<MouseObject> AllMouseObjects => _allMouseObjects;
 
-    private Stack<MouseObject> _currentMouseObjects = new();
+    private readonly Stack<MouseObject> _currentMouseObjects = new();
+
+    [SerializeField] private UnityEvent<string> _onCollectMouse;
+    [SerializeField] private string _format;
+
+    public UnityEvent<string> OnCollectMouse => _onCollectMouse;
+
+    private int _currentMouseCount;
+    public int CurrentMouseCount => _currentMouseCount;
+    public void ModifyCurrentMouseCount(int amount)
+    {
+        _currentMouseCount += amount;
+
+        _onCollectMouse.Invoke(FormatCount);
+    }
+
+    private int _maxMouseCount;
+    public int MaxMouseCount => _maxMouseCount;
+
+    public string FormatCount => string.Format(_format, _maxMouseCount - _currentMouseCount, _maxMouseCount);
 
     private void Awake()
     {
@@ -46,7 +66,10 @@ public class MouseObjectManager : MonoBehaviour
         if (_currentMouseObjects.Count > 0)
             return;
 
-        var randomMouseObjects = _allMouseObjects.OrderBy(_ => Random.Range(-1, 2)).Take(Random.Range(_mouseCount.Min, _mouseCount.Max + 1));
+        int mouseCount = Random.Range(_mouseCount.Min, _mouseCount.Max + 1);
+        var randomMouseObjects = _allMouseObjects.OrderBy(_ => Random.Range(-1, 2)).Take(mouseCount);
+
+        _maxMouseCount = mouseCount;
 
         foreach (var mouseObject in randomMouseObjects)
         {
@@ -65,5 +88,7 @@ public class MouseObjectManager : MonoBehaviour
             MouseObject mouseObject = _currentMouseObjects.Pop();
             mouseObject.RemoveMouse();
         }
+
+        _maxMouseCount = 0;
     }
 }

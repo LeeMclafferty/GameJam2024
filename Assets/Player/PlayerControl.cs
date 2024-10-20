@@ -32,7 +32,7 @@ public class PlayerControl : MonoBehaviour
 
     [SerializeField] LayerMask groundLayers;
 
-    public UnityEvent onMouseGrab;
+    public UnityEvent<GameObject> onMouseGrab;
 
     float jumpBuffer = 0.2f;
 
@@ -250,7 +250,7 @@ public class PlayerControl : MonoBehaviour
         if (mouse != null)
         {
             Debug.Log("PLAYER CAUGHT A MOUSE");
-            onMouseGrab.Invoke();
+            onMouseGrab.Invoke(mouse.gameObject);
             // TODO destroy mouse or deactivate collider and put in front of player's face while grabbing, then destroy
             Destroy(other.gameObject);
             if(!grabbingMouse)

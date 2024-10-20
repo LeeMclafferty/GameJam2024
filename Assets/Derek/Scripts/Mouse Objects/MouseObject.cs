@@ -18,9 +18,12 @@ public abstract class MouseObject : MonoBehaviour, IInteractable, ISetup
 
         _hasMouseCurrently = true;
         _mouse = Instantiate(MouseObjectManager.Instance.MousePrefab);
+        _mouse.SetActive(false);
 
         OnEndWithoutMouse();
         OnStartWithMouse(_mouse);
+
+        MouseObjectManager.Instance.ModifyCurrentMouseCount(1);
     }
 
     public void RemoveMouse()
@@ -32,20 +35,16 @@ public abstract class MouseObject : MonoBehaviour, IInteractable, ISetup
         OnStartWithoutMouse();
 
         _hasMouseCurrently = false;
-        Destroy(_mouse);
         _mouse = null;
+
+        MouseObjectManager.Instance.ModifyCurrentMouseCount(-1);
     }
-    
+
     protected virtual void Awake()
     {
         _anim = GetComponent<Animator>();
-    }
-
-    private void Start()
-    {
         MouseObjectManager.Instance.AllMouseObjects.Add(this);
     }
-
     private void Update()
     {
         if (_hasMouseCurrently)
@@ -68,10 +67,14 @@ public abstract class MouseObject : MonoBehaviour, IInteractable, ISetup
 
     public void OnInteract(GameObject player)
     {
-        Debug.Log($"{name} was interacted with by {player.name}");
-
         _anim.SetTrigger("Interact");
         _onInteract.Invoke(player);
+
+        if (_hasMouseCurrently)
+        {
+            _mouse.SetActive(true);
+            RemoveMouse();
+        }
     }
 
     public abstract void OnSetup();

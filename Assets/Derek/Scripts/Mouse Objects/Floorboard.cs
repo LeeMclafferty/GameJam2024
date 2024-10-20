@@ -3,9 +3,11 @@ using UnityEngine;
 [AddComponentMenu("Mouse Objects/Floorboard")]
 public class Floorboard : MouseObject
 {
+    [SerializeField] private float _rotation;
+
     public override void OnStartWithMouse(GameObject mouse)
     {
-
+        //transform.rotation
     }
 
     public override void OnStartWithoutMouse()

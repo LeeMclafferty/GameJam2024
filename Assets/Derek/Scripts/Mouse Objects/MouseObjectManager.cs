@@ -69,7 +69,7 @@ public class MouseObjectManager : MonoBehaviour
         int mouseCount = Random.Range(_mouseCount.Min, _mouseCount.Max + 1);
         var randomMouseObjects = _allMouseObjects.OrderBy(_ => Random.Range(-1, 2)).Take(mouseCount);
 
-        _maxMouseCount = mouseCount;
+        _maxMouseCount = randomMouseObjects.Count();
 
         foreach (var mouseObject in randomMouseObjects)
         {

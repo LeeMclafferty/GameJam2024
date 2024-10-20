@@ -22,6 +22,8 @@ public abstract class MouseObject : MonoBehaviour, IInteractable, ISetup
 
         OnEndWithoutMouse();
         OnStartWithMouse(_mouse);
+
+        MouseObjectManager.Instance.ModifyCurrentMouseCount(1);
     }
 
     public void RemoveMouse()
@@ -34,18 +36,15 @@ public abstract class MouseObject : MonoBehaviour, IInteractable, ISetup
 
         _hasMouseCurrently = false;
         _mouse = null;
+
+        MouseObjectManager.Instance.ModifyCurrentMouseCount(-1);
     }
-    
+
     protected virtual void Awake()
     {
         _anim = GetComponent<Animator>();
-    }
-
-    private void Start()
-    {
         MouseObjectManager.Instance.AllMouseObjects.Add(this);
     }
-
     private void Update()
     {
         if (_hasMouseCurrently)

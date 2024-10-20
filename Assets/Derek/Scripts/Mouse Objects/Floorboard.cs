@@ -17,10 +17,7 @@ public class Floorboard : MouseObject
 
     public override void OnStartWithMouse(GameObject mouse)
     {
-        Vector3 rotation = transform.rotation.eulerAngles;
-        rotation.z = _mouseBoardRotation;
 
-        _mouseFloorboard.transform.rotation = Quaternion.Euler(rotation);
     }
 
     public override void OnStartWithoutMouse()
@@ -30,7 +27,13 @@ public class Floorboard : MouseObject
 
     public override void OnUpdateWithMouse(GameObject mouse)
     {
+        Vector3 rotation = transform.rotation.eulerAngles;
+        rotation.z = _mouseBoardRotation;
 
+        Vector3 rotation2 = transform.rotation.eulerAngles;
+        rotation2.z = -_mouseBoardRotation;
+
+        _mouseFloorboard.transform.rotation = Quaternion.Lerp(Quaternion.Euler(rotation), Quaternion.Euler(rotation2), Mathf.Sin(Time.time));
     }
 
     public override void OnUpdateWithoutMouse()

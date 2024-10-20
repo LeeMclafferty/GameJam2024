@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
     {
         MouseObjectManager.Instance.SetupAllMouseObjects();
         _currentWave = 1;
+
+        StartWave();
     }
 
     private void Update()

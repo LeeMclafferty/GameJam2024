@@ -879,6 +879,21 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1481831500179499731, guid: 35ed2e947d1bd7347a78f3f468804482,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1481831500179499731, guid: 35ed2e947d1bd7347a78f3f468804482,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1481831500179499731, guid: 35ed2e947d1bd7347a78f3f468804482,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1481831500179499731, guid: 35ed2e947d1bd7347a78f3f468804482,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.2
       objectReference: {fileID: 0}
@@ -925,6 +940,11 @@ PrefabInstance:
     - target: {fileID: 1481831500179499731, guid: 35ed2e947d1bd7347a78f3f468804482,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2937070009236700914, guid: 35ed2e947d1bd7347a78f3f468804482,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6716342335761420013, guid: 35ed2e947d1bd7347a78f3f468804482,

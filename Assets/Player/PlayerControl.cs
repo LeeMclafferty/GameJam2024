@@ -17,6 +17,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] Transform rightArm;
     [SerializeField] Transform[] legs = new Transform[4];
     [SerializeField] Transform mouseHoldPoint;
+    [SerializeField] AudioSource footstepAudioSource;
     //[SerializeField] Transform rearRoot;
     [SerializeField] float rotationMultX = 1f;
     [SerializeField] float rotationMultY = 1f;
@@ -122,8 +123,13 @@ public class PlayerControl : MonoBehaviour
 
             rigid.AddForce(moveDirection, ForceMode.VelocityChange);
 
-            if(!isPouncing && !grabbingMouse)
+            if(isGrounded && !isPouncing && !grabbingMouse)
                 AnimateLegs();
+            else
+            {
+                if(footstepAudioSource.isPlaying)
+                    footstepAudioSource.Stop();
+            }
             
         }
         else
@@ -132,11 +138,17 @@ public class PlayerControl : MonoBehaviour
             {
                 rigid.AddForce(-rigid.velocity * Time.deltaTime * 5f, ForceMode.VelocityChange);
             }
+
+            if(footstepAudioSource.isPlaying)
+                footstepAudioSource.Stop();
         }
     }
 
     void AnimateLegs()
     {
+        if(!footstepAudioSource.isPlaying)
+            footstepAudioSource.Play();
+
         stepTime += Time.deltaTime;
         legs[stepIndex].localPosition = new Vector3(0, Mathf.Sin((stepTime / stepSpeed) * Mathf.PI) * stepHeight, 0);
         legs[stepIndex + 2].localPosition = new Vector3(0, Mathf.Sin((stepTime / stepSpeed) * Mathf.PI) * stepHeight, 0);
@@ -306,6 +318,7 @@ public class PlayerControl : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             pauseMenu.SetActive(true);
+            pauseMenu.BroadcastMessage("Randomize");
             Time.timeScale = 0f;
         }
         else

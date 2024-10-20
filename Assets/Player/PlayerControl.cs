@@ -8,6 +8,7 @@ public class PlayerControl : MonoBehaviour
 {
     [SerializeField] Transform neck;
     [SerializeField] Transform graphicsRoot;
+    [SerializeField] Transform eyes;
     //[SerializeField] Transform rearRoot;
     [SerializeField] float rotationMultX = 1f;
     [SerializeField] float rotationMultY = 1f;
@@ -45,6 +46,8 @@ public class PlayerControl : MonoBehaviour
         lookVertical = look.y;
 
         RotateNeck();
+
+        LookForTarget();
     }
 
     void FixedUpdate()
@@ -91,6 +94,19 @@ public class PlayerControl : MonoBehaviour
         //ROTATE GRAPHICS ROOT TO MATCH LOOK DIRECTION
         graphicsRoot.localRotation = Quaternion.Euler(0, newRot.y, 0);
     }
+
+    void LookForTarget()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(eyes.position, eyes.forward, out hit, 50))
+        {
+            if(hit.collider.tag == "Enemy")
+            {
+                print("PLAYER IS SEEING A MOUSE!");
+            }
+        }
+    }
+
 
     void Jump()
     {

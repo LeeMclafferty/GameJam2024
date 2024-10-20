@@ -20,7 +20,13 @@ public class GameManager : MonoBehaviour
     private bool _isWaveActive;
 
     public float WaveIntensityValue => _waveIntensityOffset + (_currentWave * _waveIntensityScale);
-    
+
+    private int _totalTimeSaved;
+    public int TotalTimeSaved => _totalTimeSaved;
+
+    private int _totalMiceCaptured;
+    public int TotalMiceCaptured => _totalMiceCaptured;
+
     private void Start()
     {
         MouseObjectManager.Instance.SetupAllMouseObjects();
@@ -63,6 +69,9 @@ public class GameManager : MonoBehaviour
         MouseObjectManager.Instance.RemoveAllMice();
         Timer.Instance.SetTimerState(false);
         Timer.Instance.ResetTime();
+
+        _totalTimeSaved += (int)Timer.Instance.CurrentTime;
+        _totalMiceCaptured += MouseObjectManager.Instance.CollectedMouseCount;
 
         StartCoroutine(ConvertTimeToScoreOverTime());
     }

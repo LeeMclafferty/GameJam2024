@@ -15,6 +15,8 @@ namespace LibrarySf
 
         public void LoadScene()
         {
+            Time.timeScale = 1;
+
             if (System.String.IsNullOrEmpty(Scene))
             {
                 Debug.LogError(this.name + " has no Scene for GoesToScene component");

@@ -35,7 +35,8 @@ public class MouseObjectManager : MonoBehaviour
     private int _maxMouseCount;
     public int MaxMouseCount => _maxMouseCount;
 
-    public string FormatCount => string.Format(_format, _maxMouseCount - _currentMouseCount, _maxMouseCount);
+    public int CollectedMouseCount => _maxMouseCount - _currentMouseCount;
+    public string FormatCount => string.Format(_format, CollectedMouseCount, _maxMouseCount);
 
     private void Awake()
     {

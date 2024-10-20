@@ -252,6 +252,7 @@ public class PlayerControl : MonoBehaviour
             Debug.Log("PLAYER CAUGHT A MOUSE");
             onMouseGrab.Invoke();
             // TODO destroy mouse or deactivate collider and put in front of player's face while grabbing, then destroy
+            Destroy(other.gameObject);
             if(!grabbingMouse)
                 StartCoroutine(GrabMouse());
         }

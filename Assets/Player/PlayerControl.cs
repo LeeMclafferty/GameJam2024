@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerControl : MonoBehaviour
 {
+    [SerializeField] GameObject pauseMenu;
+
     [SerializeField] Transform neck;
     [SerializeField] Transform graphicsRoot;
     [SerializeField] Transform eyes;
@@ -17,6 +20,7 @@ public class PlayerControl : MonoBehaviour
 
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpForce = 10f;
+    [SerializeField] float pounceForce = 20f;
 
     [SerializeField] LayerMask groundLayers;
 
@@ -30,16 +34,21 @@ public class PlayerControl : MonoBehaviour
     [HideInInspector]
     public float horizontal, vertical, lookHorizontal, lookVertical;
 
+    bool isGrounded;
     Vector3 floorNormal = Vector3.up;
 
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
     void Update()
     {
+        if(pauseMenu.activeSelf) return;
+
         horizontal = move.x;
         vertical = move.y;
         lookHorizontal = look.x;
@@ -52,7 +61,7 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        bool isGrounded = CheckGrounded();
+        isGrounded = CheckGrounded();
         if(jump > 0f)
         {
             jump -= Time.deltaTime;
@@ -73,6 +82,13 @@ public class PlayerControl : MonoBehaviour
             rigid.AddForce(moveDirection, ForceMode.VelocityChange);
 
             //ROTATE REAR TO FOLLOW MOVE DIRECTION
+        }
+        else
+        {
+            if(isGrounded && rigid.velocity.magnitude > 1f)
+            {
+                rigid.AddForce(-rigid.velocity * Time.deltaTime * 5f, ForceMode.VelocityChange);
+            }
         }
     }
 
@@ -114,6 +130,13 @@ public class PlayerControl : MonoBehaviour
         rigid.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
+    void Pounce()
+    {
+        if(!isGrounded)
+            rigid.AddForce(neck.forward * pounceForce, ForceMode.Impulse);
+        else rigid.AddForce(Vector3.ProjectOnPlane(neck.forward, floorNormal).normalized * pounceForce, ForceMode.Impulse);
+    }
+
 
     bool CheckGrounded()
     {
@@ -132,21 +155,59 @@ public class PlayerControl : MonoBehaviour
     //Input Events
     void OnLook(InputValue value)
     {
+        if (pauseMenu.activeSelf) return;
+
         look = value.Get<Vector2>();
     }
     void OnMove(InputValue value)
     {
+        if (pauseMenu.activeSelf) return;
+
         move = value.Get<Vector2>();
     }
     void OnJump(InputValue value)
     {
+        if (pauseMenu.activeSelf) return;
+
         if (value.isPressed)
             jump = jumpBuffer;
     }
     void OnAttack(InputValue value)
     {
+        if (pauseMenu.activeSelf) return;
+
+        if(!value.isPressed) return;
+
         Debug.Log("SWIPE OR SOMETHING");
-        //pounce or swipe at mouse or something
+        Pounce();
+    }
+    void OnPause(InputValue value)
+    {
+        if(!value.isPressed) return;
+
+        if(Cursor.lockState == CursorLockMode.Locked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Unpause();
+        }
+    }
+
+    public void Unpause()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    public void QuitToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
     }
 
 

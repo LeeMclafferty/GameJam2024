@@ -21,17 +21,21 @@ public class MouseObjectManager : MonoBehaviour
     [SerializeField] private UnityEvent<string> _onCollectMouse;
     [SerializeField] private string _format;
 
+    public UnityEvent<string> OnCollectMouse => _onCollectMouse;
+
     private int _currentMouseCount;
     public int CurrentMouseCount => _currentMouseCount;
     public void ModifyCurrentMouseCount(int amount)
     {
         _currentMouseCount += amount;
 
-        _onCollectMouse.Invoke(string.Format(_format, _maxMouseCount - _currentMouseCount, _maxMouseCount));
+        _onCollectMouse.Invoke(FormatCount);
     }
 
     private int _maxMouseCount;
     public int MaxMouseCount => _maxMouseCount;
+
+    public string FormatCount => string.Format(_format, _maxMouseCount - _currentMouseCount, _maxMouseCount);
 
     private void Awake()
     {

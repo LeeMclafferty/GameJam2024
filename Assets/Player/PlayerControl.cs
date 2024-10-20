@@ -51,6 +51,7 @@ public class PlayerControl : MonoBehaviour
 
     float stepTime = 0f;
     int stepIndex = 0;
+    float accelerator = 2.0f;
 
     Vector3 floorNormal = Vector3.up;
 
@@ -118,8 +119,12 @@ public class PlayerControl : MonoBehaviour
         {
             Vector3 moveDirection = Vector3.ProjectOnPlane(neck.forward, floorNormal).normalized * vertical
                             + Vector3.ProjectOnPlane(neck.right, floorNormal).normalized * horizontal;
-                    
-            moveDirection = moveDirection * moveSpeed * Time.deltaTime;
+
+            if(accelerator > 1.0f)
+                accelerator -= Time.deltaTime;
+            else accelerator = 1.0f;
+            
+            moveDirection = moveDirection * moveSpeed * accelerator * Time.deltaTime;
 
             rigid.AddForce(moveDirection, ForceMode.VelocityChange);
 
@@ -134,6 +139,8 @@ public class PlayerControl : MonoBehaviour
         }
         else
         {
+            accelerator = 2.0f;
+
             if(isGrounded && rigid.velocity.magnitude > 1f)
             {
                 rigid.AddForce(-rigid.velocity * Time.deltaTime * 5f, ForceMode.VelocityChange);

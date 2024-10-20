@@ -138,7 +138,7 @@ PrefabInstance:
     - target: {fileID: 2359170940554258998, guid: 3a2f0c19286f049fbb9c4df2b8ac330e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 2359170940554258998, guid: 3a2f0c19286f049fbb9c4df2b8ac330e,
         type: 3}
@@ -180,6 +180,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4838209524695934342, guid: 3a2f0c19286f049fbb9c4df2b8ac330e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 8945679353729767997, guid: 3a2f0c19286f049fbb9c4df2b8ac330e,
         type: 3}
       propertyPath: m_Name
@@ -559,12 +564,12 @@ PrefabInstance:
     - target: {fileID: 1481831500179499731, guid: 35ed2e947d1bd7347a78f3f468804482,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.36
+      value: 7.04
       objectReference: {fileID: 0}
     - target: {fileID: 1481831500179499731, guid: 35ed2e947d1bd7347a78f3f468804482,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -12.62
       objectReference: {fileID: 0}
     - target: {fileID: 1481831500179499731, guid: 35ed2e947d1bd7347a78f3f468804482,
         type: 3}
@@ -731,7 +736,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35ed2e947d1bd7347a78f3f468804482, type: 3}
---- !u!1001 &1933369094
+--- !u!1001 &4415858671838854388
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -739,66 +744,66 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 369100009241765100, guid: fb6800c7ec5e74c3897397c1b190ad05,
+        type: 3}
+      propertyPath: m_Name
+      value: HauntedHouse (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.09
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071067
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: -0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0e1e055f26f343248a9b1ee581d65a6c,
+    - target: {fileID: 1032624126990401110, guid: fb6800c7ec5e74c3897397c1b190ad05,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 0e1e055f26f343248a9b1ee581d65a6c,
-        type: 3}
-      propertyPath: m_Name
-      value: HauntedHouse (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0e1e055f26f343248a9b1ee581d65a6c, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: fb6800c7ec5e74c3897397c1b190ad05, type: 3}
 --- !u!1001 &8650174639916781409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -864,6 +869,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7182293228974588887, guid: ff0ac7651857d496a9d331285eb77d90,
         type: 3}
+      propertyPath: m_VoxelSize
+      value: 0.033333335
+      objectReference: {fileID: 0}
+    - target: {fileID: 7182293228974588887, guid: ff0ac7651857d496a9d331285eb77d90,
+        type: 3}
+      propertyPath: m_AgentTypeID
+      value: -1372625422
+      objectReference: {fileID: 0}
+    - target: {fileID: 7182293228974588887, guid: ff0ac7651857d496a9d331285eb77d90,
+        type: 3}
       propertyPath: m_NavMeshData
       value: 
       objectReference: {fileID: 23800000, guid: ad433ef4c74084c3087ab38cedc16b24,
@@ -883,4 +898,4 @@ SceneRoots:
   - {fileID: 1478448380}
   - {fileID: 8650174639916781409}
   - {fileID: 652667465}
-  - {fileID: 1933369094}
+  - {fileID: 4415858671838854388}

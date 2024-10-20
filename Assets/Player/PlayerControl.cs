@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -30,6 +31,8 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float stepHeight = 0.3f;
 
     [SerializeField] LayerMask groundLayers;
+
+    public UnityEvent onMouseGrab;
 
     float jumpBuffer = 0.2f;
 
@@ -247,6 +250,8 @@ public class PlayerControl : MonoBehaviour
         if (mouse != null)
         {
             Debug.Log("PLAYER CAUGHT A MOUSE");
+            onMouseGrab.Invoke();
+            // TODO destroy mouse or deactivate collider and put in front of player's face while grabbing, then destroy
             if(!grabbingMouse)
                 StartCoroutine(GrabMouse());
         }

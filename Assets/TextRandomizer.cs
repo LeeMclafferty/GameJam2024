@@ -14,6 +14,8 @@ public class TextRandomizer : MonoBehaviour
 
     void Randomize()
     {
-        textMesh.text = Random.value > 0.9 ? "PAWS" : "PAUSE";
+        if(textMesh == null) return;
+        
+        textMesh.text = Random.value > 0.7 ? "PAWS" : "PAUSE";
     }
 }

@@ -8,6 +8,7 @@ public class MouseControler : MonoBehaviour
    private NavMeshAgent agent;
    private bool isWaiting = false;
    private GameObject player;
+   private bool isEscapingToHole = false;
 
    [SerializeField]
    private float minWaitTime = 1f;
@@ -22,15 +23,13 @@ public class MouseControler : MonoBehaviour
    private float minimumPlayerDistance = 5f;
 
    [SerializeField]
-   private int previousLocationsToStore = 5; // How many previous locations to remember
+   private float holeReachDistance = 1f; // Distance to consider "reached" the hole
 
    [SerializeField]
-   private float previousLocationMinDistance = 5f; // Minimum distance from previous locations
+   private int previousLocationsToStore = 5;
 
-   private bool isEscaping = false;
-   private float stuckCheckTime = 0.5f;
-   private float lastMovedPosition;
-   private float stuckTimer;
+   [SerializeField]
+   private float previousLocationMinDistance = 5f;
    
    private List<Vector3> previousLocations = new List<Vector3>();
 
@@ -45,8 +44,6 @@ public class MouseControler : MonoBehaviour
            return;
        }
        
-       lastMovedPosition = transform.position.magnitude;
-       // Add starting position to previous locations
        AddToPreviousLocations(transform.position);
        MoveToRandomPosition();
    }
@@ -55,27 +52,48 @@ public class MouseControler : MonoBehaviour
    {
        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-       if (distanceToPlayer < minimumPlayerDistance)
+       if (isEscapingToHole)
        {
-           if (!isEscaping)
-           {
-               isEscaping = true;
-               EscapeFromPlayer();
-           }
-           else
-           {
-               CheckIfStuck();
-           }
+           CheckHoleReached();
        }
-       else if (isEscaping && distanceToPlayer >= minimumPlayerDistance)
+       else if (distanceToPlayer < minimumPlayerDistance)
        {
-           isEscaping = false;
-           ResetStuckCheck();
-           MoveToRandomPosition();
+           EscapeToMouseHole();
        }
-       else if (!isEscaping && !isWaiting && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+       else if (!isWaiting && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
        {
            StartCoroutine(WaitAndMove());
+       }
+   }
+
+   private void EscapeToMouseHole()
+   {
+       GameObject[] mouseHoles = GameObject.FindGameObjectsWithTag("Mouse Hole");
+       
+       if (mouseHoles.Length > 0)
+       {
+           // Choose a random mouse hole
+           GameObject targetHole = mouseHoles[Random.Range(0, mouseHoles.Length)];
+           
+           // Set destination to the chosen hole
+           agent.SetDestination(targetHole.transform.position);
+           isEscapingToHole = true;
+           Debug.Log("Escaping to mouse hole!");
+       }
+       else
+       {
+           Debug.LogWarning("No mouse holes found in the scene!");
+           // Fallback to random movement if no holes found
+           MoveToRandomPosition();
+       }
+   }
+
+   private void CheckHoleReached()
+   {
+       if (!agent.pathPending && agent.remainingDistance <= holeReachDistance)
+       {
+           Debug.Log("Reached mouse hole, despawning!");
+           Destroy(gameObject); // Despawn the object
        }
    }
 
@@ -84,7 +102,7 @@ public class MouseControler : MonoBehaviour
        previousLocations.Add(location);
        if (previousLocations.Count > previousLocationsToStore)
        {
-           previousLocations.RemoveAt(0); // Remove oldest location
+           previousLocations.RemoveAt(0);
        }
    }
 
@@ -98,49 +116,6 @@ public class MouseControler : MonoBehaviour
            }
        }
        return false;
-   }
-
-   private void CheckIfStuck()
-   {
-       float currentPosition = transform.position.magnitude;
-       
-       if (Mathf.Abs(currentPosition - lastMovedPosition) < 0.1f)
-       {
-           stuckTimer += Time.deltaTime;
-           if (stuckTimer >= stuckCheckTime)
-           {
-               Debug.Log("Stuck while escaping, reverting to random movement");
-               isEscaping = false;
-               ResetStuckCheck();
-               MoveToRandomPosition();
-           }
-       }
-       else
-       {
-           ResetStuckCheck();
-       }
-       
-       lastMovedPosition = currentPosition;
-   }
-
-   private void ResetStuckCheck()
-   {
-       stuckTimer = 0f;
-       lastMovedPosition = transform.position.magnitude;
-   }
-
-   private void EscapeFromPlayer()
-   {
-       Vector3 directionAwayFromPlayer = (transform.position - player.transform.position).normalized;
-       Vector3 escapePoint = transform.position + directionAwayFromPlayer * (moveRadius * 2);
-       
-       NavMeshHit hit;
-       if (NavMesh.SamplePosition(escapePoint, out hit, moveRadius, NavMesh.AllAreas))
-       {
-           agent.SetDestination(hit.position);
-           ResetStuckCheck();
-           Debug.Log("Escaping from player!");
-       }
    }
 
    private bool IsPositionTooCloseToPlayer(Vector3 position)
@@ -162,17 +137,12 @@ public class MouseControler : MonoBehaviour
            
            if (NavMesh.SamplePosition(randomPosition, out hit, moveRadius, NavMesh.AllAreas))
            {
-               // Check both player distance and previous locations
                if (!IsPositionTooCloseToPlayer(hit.position) && !IsTooCloseToOldLocations(hit.position))
                {
                    agent.SetDestination(hit.position);
-                   AddToPreviousLocations(hit.position); // Add new destination to history
+                   AddToPreviousLocations(hit.position);
                    Debug.Log($"Moving to new position: {hit.position}");
                    return;
-               }
-               else
-               {
-                   Debug.Log("Position too close to player or previous locations, trying again");
                }
            }
            attempts++;
@@ -191,7 +161,7 @@ public class MouseControler : MonoBehaviour
        if (NavMesh.SamplePosition(randomPosition, out hit, moveRadius, NavMesh.AllAreas))
        {
            agent.SetDestination(hit.position);
-           AddToPreviousLocations(hit.position); // Add fallback position to history
+           AddToPreviousLocations(hit.position);
            Debug.Log($"Moving to fallback position: {hit.position}");
        }
    }
@@ -204,7 +174,7 @@ public class MouseControler : MonoBehaviour
        float waitTime = Random.Range(minWaitTime, maxWaitTime);
        yield return new WaitForSeconds(waitTime);
        
-       if (!isEscaping)
+       if (!isEscapingToHole)
        {
            MoveToRandomPosition();
        }

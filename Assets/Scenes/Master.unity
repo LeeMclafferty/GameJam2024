@@ -1728,79 +1728,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1714670086}
   m_SourcePrefab: {fileID: 100100000, guid: 4f82f21cdc54a09468d9c88509a238de, type: 3}
---- !u!1001 &661673707
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071067
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 4b0fb689e6802e945aac2bd878a211e7, type: 2}
-    - target: {fileID: 919132149155446097, guid: 25309c17e3644ce48911091336ff344e,
-        type: 3}
-      propertyPath: m_Name
-      value: HauntedHouse-Glass
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 25309c17e3644ce48911091336ff344e, type: 3}
 --- !u!1001 &667877432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4889,7 +4816,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 0.28148845, g: 0, b: 0.30817598, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4947,13 +4874,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1702597457}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: -0.12340481, y: -0.9757464, z: -0.05428782, w: 0.1724619}
   m_LocalPosition: {x: 59.274414, y: -61.648254, z: -86.17346}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: -8.54, y: -160.926, z: 12.979}
 --- !u!1 &1713877209 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 87791582317c9a94d9f51d4da089a242,
@@ -6003,7 +5930,6 @@ SceneRoots:
   - {fileID: 277150609}
   - {fileID: 1036543717}
   - {fileID: 36651246}
-  - {fileID: 661673707}
   - {fileID: 468733688}
   - {fileID: 57565379}
   - {fileID: 1554782965}

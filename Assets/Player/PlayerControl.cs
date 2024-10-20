@@ -16,6 +16,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] Transform leftArm;
     [SerializeField] Transform rightArm;
     [SerializeField] Transform[] legs = new Transform[4];
+    [SerializeField] Transform mouseHoldPoint;
     //[SerializeField] Transform rearRoot;
     [SerializeField] float rotationMultX = 1f;
     [SerializeField] float rotationMultY = 1f;
@@ -51,6 +52,8 @@ public class PlayerControl : MonoBehaviour
     int stepIndex = 0;
 
     Vector3 floorNormal = Vector3.up;
+
+    GameObject grabbedMouse;
 
     void Start()
     {
@@ -227,6 +230,8 @@ public class PlayerControl : MonoBehaviour
         legs[0].gameObject.SetActive(true);
         legs[1].gameObject.SetActive(true);
         grabbingMouse = false;
+
+        Destroy(grabbedMouse);
     }
 
 
@@ -252,7 +257,12 @@ public class PlayerControl : MonoBehaviour
             Debug.Log("PLAYER CAUGHT A MOUSE");
             onMouseGrab.Invoke(mouse.gameObject);
             // TODO destroy mouse or deactivate collider and put in front of player's face while grabbing, then destroy
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
+            other.enabled = false;
+            other.transform.parent = mouseHoldPoint;
+            other.transform.localPosition = Vector3.zero;
+            other.transform.localScale = Vector3.one * 0.05f;
+            grabbedMouse = other.gameObject;
             if(!grabbingMouse)
                 StartCoroutine(GrabMouse());
         }
@@ -285,7 +295,7 @@ public class PlayerControl : MonoBehaviour
 
         if(!value.isPressed) return;
 
-        Debug.Log("SWIPE OR SOMETHING");
+        //Debug.Log("SWIPE OR SOMETHING");
         Pounce();
     }
     void OnPause(InputValue value)

@@ -67,8 +67,6 @@ public abstract class MouseObject : MonoBehaviour, IInteractable, ISetup
 
     public void OnInteract(GameObject player)
     {
-        Debug.Log($"{name} was interacted with by {player.name}");
-
         _anim.SetTrigger("Interact");
         _onInteract.Invoke(player);
 

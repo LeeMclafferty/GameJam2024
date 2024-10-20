@@ -11,7 +11,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private UnityEvent<string> _onTick;
     [SerializeField] private string _format;
 
-    private float _timeMultiplier;
+    [SerializeField] private float _timeMultiplier;
 
     private float _currentTime;
     public float CurrentTime => _currentTime;

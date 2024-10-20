@@ -13,10 +13,10 @@ public class MouseObjectManager : MonoBehaviour
 
     [SerializeField] private Range<int> _mouseCount;
 
-    private List<MouseObject> _allMouseObjects = new();
+    private readonly List<MouseObject> _allMouseObjects = new();
     public List<MouseObject> AllMouseObjects => _allMouseObjects;
 
-    private Stack<MouseObject> _currentMouseObjects = new();
+    private readonly Stack<MouseObject> _currentMouseObjects = new();
 
     [SerializeField] private UnityEvent<string> _onCollectMouse;
     [SerializeField] private string _format;

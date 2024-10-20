@@ -13,6 +13,7 @@ public class Interact : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, _maxInteractDistance, _interactLayer) && hit.collider.gameObject.TryGetComponent(out IInteractable interact))
             {
+                Debug.Log($"{gameObject.name} interacted with {hit.collider.gameObject.name}");
                 interact.OnInteract(gameObject);
             }
         }

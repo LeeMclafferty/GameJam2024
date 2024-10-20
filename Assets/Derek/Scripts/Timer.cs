@@ -11,6 +11,8 @@ public class Timer : MonoBehaviour
     [SerializeField] private UnityEvent<string> _onTick;
     [SerializeField] private string _format;
 
+    public UnityEvent<string> OnTick => _onTick;
+
     [SerializeField] private float _timeMultiplier;
 
     private float _currentTime;
@@ -42,7 +44,11 @@ public class Timer : MonoBehaviour
         if (_isCounting)
         {
             _currentTime += _timeMultiplier * Time.deltaTime;
-            _onTick.Invoke(string.Format(_format, _currentTime));
+
+            var time = System.TimeSpan.FromSeconds(_currentTime);
+            string text = new(time.ToString(_format));
+
+            _onTick.Invoke(text);
         }
     }
 }

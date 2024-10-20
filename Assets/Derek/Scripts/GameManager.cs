@@ -29,7 +29,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (_isWaveActive && (MouseObjectManager.Instance.CurrentMouseCount == 0 || Timer.Instance.CurrentTime <= 0))
+        bool isTimerOver = Timer.Instance.TimeMultiplier > 0 ? Timer.Instance.CurrentTime >= Timer.Instance.EndTime : Timer.Instance.CurrentTime <= Timer.Instance.EndTime;
+
+        if (_isWaveActive && (MouseObjectManager.Instance.CurrentMouseCount == 0 || isTimerOver))
         {
             EndWave();
         }

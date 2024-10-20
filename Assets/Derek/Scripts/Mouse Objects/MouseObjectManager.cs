@@ -21,17 +21,21 @@ public class MouseObjectManager : MonoBehaviour
     [SerializeField] private UnityEvent<string> _onCollectMouse;
     [SerializeField] private string _format;
 
+    public UnityEvent<string> OnCollectMouse => _onCollectMouse;
+
     private int _currentMouseCount;
     public int CurrentMouseCount => _currentMouseCount;
     public void ModifyCurrentMouseCount(int amount)
     {
         _currentMouseCount += amount;
 
-        _onCollectMouse.Invoke(string.Format(_format, _maxMouseCount - _currentMouseCount, _maxMouseCount));
+        _onCollectMouse.Invoke(FormatCount);
     }
 
     private int _maxMouseCount;
     public int MaxMouseCount => _maxMouseCount;
+
+    public string FormatCount => string.Format(_format, _maxMouseCount - _currentMouseCount, _maxMouseCount);
 
     private void Awake()
     {
@@ -65,7 +69,7 @@ public class MouseObjectManager : MonoBehaviour
         int mouseCount = Random.Range(_mouseCount.Min, _mouseCount.Max + 1);
         var randomMouseObjects = _allMouseObjects.OrderBy(_ => Random.Range(-1, 2)).Take(mouseCount);
 
-        _maxMouseCount = mouseCount;
+        _maxMouseCount = randomMouseObjects.Count();
 
         foreach (var mouseObject in randomMouseObjects)
         {

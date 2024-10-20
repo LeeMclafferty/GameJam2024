@@ -13,7 +13,13 @@ Claw your way through as many 2D ghost mice as you can in a 3D haunted house.
 - Programming - Derek, C, & Mark
 - Art or Audio - Dana, Lee, Shawn, & Colias
 
-# Audio citation
+# Citations
+
+## Art
+
+- Font - https://www.dafont.com/curse-of-the-zombie.font
+
+## Audio
 
 - CatRunning.wav - Foley done in venture mechanics building of finger nails on a paper plate.
 - MouseSqueak.wav - Colias voice acting

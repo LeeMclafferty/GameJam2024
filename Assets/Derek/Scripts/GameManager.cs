@@ -68,12 +68,12 @@ public class GameManager : MonoBehaviour
 
         _isWaveActive = false;
 
+        _totalTimeSaved += (int)Timer.Instance.CurrentTime;
+        _totalMiceCaptured += MouseObjectManager.Instance.CollectedMouseCount;
+
         MouseObjectManager.Instance.RemoveAllMice();
         Timer.Instance.SetTimerState(false);
         Timer.Instance.ResetTime();
-
-        _totalTimeSaved += (int)Timer.Instance.CurrentTime;
-        _totalMiceCaptured += MouseObjectManager.Instance.CollectedMouseCount;
 
         StartCoroutine(ConvertTimeToScoreOverTime());
     }

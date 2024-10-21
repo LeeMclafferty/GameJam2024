@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UpdateResults : MonoBehaviour
@@ -20,5 +18,7 @@ public class UpdateResults : MonoBehaviour
 
         int points = _pointsPerMouse * _gameManager.TotalMiceCaptured + _pointsPerSecond * _gameManager.TotalTimeSaved;
         _totalPoints.SetText(points.ToString());
+
+        Cursor.lockState = CursorLockMode.None;
     }
 }

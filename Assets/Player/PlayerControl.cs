@@ -287,6 +287,14 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (isPouncing && collision.gameObject.TryGetComponent(out IInteractable interact))
+        {
+            Debug.Log($"{gameObject.name} interacted with {collision.gameObject.name}");
+            interact.OnInteract(gameObject);
+        }
+    }
 
     //Input Events
     void OnLook(InputValue value)

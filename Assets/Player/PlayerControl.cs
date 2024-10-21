@@ -214,8 +214,15 @@ public class PlayerControl : MonoBehaviour
 
         isPouncing = true;
         if(!isGrounded)
+        {
             rigid.AddForce(neck.forward * pounceForce, ForceMode.Impulse);
-        else rigid.AddForce(Vector3.ProjectOnPlane(neck.forward, floorNormal).normalized * pounceForce, ForceMode.Impulse);
+        }
+        else 
+        {
+            if(Vector3.Dot(neck.forward, floorNormal) > 0)
+                rigid.AddForce(neck.forward * pounceForce, ForceMode.Impulse);
+            else rigid.AddForce(Vector3.ProjectOnPlane(neck.forward, floorNormal).normalized * pounceForce, ForceMode.Impulse);
+        }
 
         leftArm.gameObject.SetActive(true);
         rightArm.gameObject.SetActive(true);

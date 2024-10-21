@@ -10,6 +10,8 @@ public class MouseControler : MonoBehaviour
     private GameObject player;
     private bool isEscapingToHole = false;
 
+    public bool isMirrorMouse = false;
+
     private Animator animator; // Reference to the Animator component
     private float originalSpeed; // Variable to store the original speed
 
@@ -42,6 +44,7 @@ public class MouseControler : MonoBehaviour
         animator = GetComponent<Animator>(); // Get the Animator component
         originalSpeed = agent.speed; // Store the original speed
         player = GameObject.FindGameObjectWithTag("Player");
+        Invoke("MakeVisible", 3f);
 
         if (player == null)
         {
@@ -53,7 +56,11 @@ public class MouseControler : MonoBehaviour
         MoveToRandomPosition();
         animator.SetBool("isMoving", false); // Set to idle initially
     }
-
+    void MakeVisible()
+    {
+        GetComponent<Collider>().enabled = true;
+        GetComponent<SpriteRenderer>().material.SetColor("_Color", Color.white);
+    }
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
